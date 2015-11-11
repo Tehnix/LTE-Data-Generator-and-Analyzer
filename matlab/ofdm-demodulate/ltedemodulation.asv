@@ -3,26 +3,21 @@ cfg = lteTestModel('1.1','1.4MHz')
 waveform = lteTestModelTool(cfg);
 rxGrid = lteOFDMDemodulate(cfg,waveform)
 
+%      NRB     Nfft
+%        6      128
+%       15      256
+%       25      512
+%       50     1024
+%       75     2048
+%      100     2048
 
 info = struct()
+info.SamplingRate = 1920000         % SamplingRate        - The sampling rate of the time domain WAVEFORM, given by SamplingRate = 30.72MHz / 2048 * Nfft.
 info.Nfft = 128                     % Nfft                    - FFT size
-info.SamplingRate = 30720000 / 2048 * info.Nfft         % SamplingRate            - The sampling rate of the time domain WAVEFORM, given by SamplingRate = 30.72MHz / 2048 * Nfft.
 info.CyclicPrefixLengths = [10 9 9 9 9 9 9 10 9 9 9 9 9 9]  % CyclicPrefixLengths - Cyclic prefix length (in samples) of each OFDM symbol in a subframe.
 
-%      NRB     Nfft     Windowing     CyclicPrefixLengths (Normal)
-%        6      128             4     [10 9 9 9 9 9 9 10 9 9 9 9 9 9]
-%       15      256             6     [20 18 18 18 18 18 18 20 18 18 18 18 18 18]
-%       25      512             4     [40 36 36 36 36 36 36 40 36 36 36 36 36 36]
-%       50     1024             6     [80 72 72 72 72 72 72 80 72 72 72 72 72 72]
-%       75     2048             8     [160 144 144 144 144 144 144 160 144 144 144 144 144 144]
-%      100     2048             8     [160 144 144 144 144 144 144 160 144 144 144 144 144 144]
-%
-% Note:   As shown in table above, for info.Nfft < 2048,
-% info.CyclicPrefixLengths are the CyclicPrefixLengths for info.Nfft = 2048 scaled by info.Nfft / 2048.
-%
-% Ref: http://se.mathworks.com/help/lte/ref/lteofdmmodulate.html
-
 enb = struct();
+
 enb.NDLRB = 6                       % NDLRB                   - Number of downlink resource blocks (Downlink bandwidth configuration) 
 enb.CellRefP = 1                    % CellRefP                - Number of transmit antenna Ports
 
