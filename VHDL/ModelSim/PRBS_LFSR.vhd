@@ -5,7 +5,7 @@ entity prbs is
 port (
   prbs_clk : in std_logic;
   rset     : in std_logic;
-  prbs_out : out std_logic_vector(31 downto 0)
+  prbs_out : out std_logic_vector(3 downto 0)
 );
 end prbs;
 
@@ -25,7 +25,7 @@ begin
       end if;
     end if;
   end process;
-prbs_out <= lfsr_reg;
+prbs_out <= lfsr_reg(30) & lfsr_reg(29) & lfsr_reg(28) & lfsr_reg(27);
 end behavior;
 
 
