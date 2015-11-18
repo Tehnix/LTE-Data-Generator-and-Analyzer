@@ -17,11 +17,14 @@ architecture behaviorial of iq_mapper is
 begin
 
   process (bit_sequence)
-    variable even_v, odd_v : std_logic_vector(modulation_width_g / 2 - 1 downto 0);
-    variable i, j             : integer;
+    variable even_v, odd_v :
+      std_logic_vector(modulation_width_g / 2 - 1 downto 0);
+
+    variable i, j : integer;
   begin
     i := 0;
     j := 0;
+
     while (i <= modulation_width_g / 2) loop
       even_v(j) := bit_sequence(i);
       odd_v(j)  := bit_sequence(i + 1);
