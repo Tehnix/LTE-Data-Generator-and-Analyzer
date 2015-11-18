@@ -5,13 +5,24 @@ GHDL ?= ghdl
 GTKWAVE ?= gtkwave
 
 analyse:
-	$(GHDL) -i --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work src/*.vhd tests/lte_signal_generator_test.vhd
+	$(GHDL) -i \
+	        --ieee=synopsys \
+	        --warn-no-vital-generic \
+	        --workdir=simu \
+	        --work=work \
+	src/types.vhd \
+	src/constants.vhd \
+	src/clock.vhd \
+	src/pseudo_random_bit_sequence.vhd \
+	src/data_buffer.vhd \
+	src/iq_mapper.vhd \
+	tests/lte_signal_generator_test.vhd
 
 compile:
-	$(GHDL) -m --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work bin/testbench
+	$(GHDL) -m --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work lte_signal_generator_test
 
 simulate:
-	./bin/testbench --stop-time=500ns --vcdgz=simulation_results.vcdgz
+	./lte_signal_generator_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
 
 wave: simulate
 	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
