@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 use work.types.all;
 
 package constants is
+  constant POLYNOMIAL_DEGREE : integer := 5;
   constant QPSK_BITS : integer := 2;
   constant QAM16_BITS : integer := 4;
   constant QAM64_BITS : integer := 6;

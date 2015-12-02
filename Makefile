@@ -13,7 +13,8 @@ analyse:
 	src/types.vhd \
 	src/constants.vhd \
 	src/clock.vhd \
-	src/pseudo_random_bit_sequence.vhd \
+	src/pseudo_noise_sequence_generator.vhd \
+	src/gold_sequence_generator.vhd \
 	src/data_buffer.vhd \
 	src/iq_mapper.vhd \
 	tests/lte_signal_generator_test.vhd
