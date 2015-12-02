@@ -21,9 +21,9 @@ V?MO=OG>OC6f2AVMMX@maW3
 !s100 j]mQIY[3A@nW>YSM>Y31K0
 Z6 OV;C;10.4b;61
 32
-Z7 !s110 1449063137
+Z7 !s110 1449068596
 !i10b 1
-Z8 !s108 1449063137.000000
+Z8 !s108 1449068596.000000
 Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\MadsEmil\Documents\GitHub\LTE-Data-Generator-and-Analyzer\VHDL\ModelSim\PRBS_LFSR.vhd|
 Z10 !s107 C:\Users\MadsEmil\Documents\GitHub\LTE-Data-Generator-and-Analyzer\VHDL\ModelSim\PRBS_LFSR.vhd|
 !i113 1
@@ -69,7 +69,7 @@ R6
 R11
 R12
 Etx_contr
-Z13 w1449063134
+Z13 w1449068593
 R1
 R2
 R3
@@ -77,8 +77,8 @@ Z14 8C:\Users\MadsEmil\Documents\GitHub\LTE-Data-Generator-and-Analyzer\VHDL\Mod
 Z15 FC:\Users\MadsEmil\Documents\GitHub\LTE-Data-Generator-and-Analyzer\VHDL\ModelSim\TX_Controller.vhd
 l0
 L4
-VXKZ;iG<kIf?[:?YPOm@AS3
-!s100 9K<LVC?HXgY357nl]PfH92
+VRG;jAl2;_=M]3X^z45:fz1
+!s100 ZNH`:3KWM637MeSV3LSCY2
 R6
 32
 R7
@@ -92,11 +92,11 @@ R12
 Abehavior
 R1
 R2
-Z18 DEx4 work 8 tx_contr 0 22 XKZ;iG<kIf?[:?YPOm@AS3
-l15
-L13
-VEABN_[FXXc:kALA_OZ]lX3
-!s100 6Tjj=Ph[;R?4[T3n@N_A>0
+Z18 DEx4 work 8 tx_contr 0 22 RG;jAl2;_=M]3X^z45:fz1
+l17
+L14
+VfH7h`Kn^1>b0ZYNQ?VQeb3
+!s100 0GoU0?QdM]C:0=[1X;38n0
 R6
 32
 R7
