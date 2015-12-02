@@ -1,0 +1,5 @@
+*.o
+*.qpf
+*.qsf
+*.qws
+work-obj*.cf
