@@ -2,4 +2,12 @@
 *.qpf
 *.qsf
 *.qws
+*.qsys
+.qsys_edit/
+db/
+fft.sopcinfo
+src/fft/*
+!src/fft/*.vhd
 work-obj*.cf
+simulation_results.vcdgz
+lte_signal_generator_test
