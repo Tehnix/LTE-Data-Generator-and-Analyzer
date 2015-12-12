@@ -14,6 +14,8 @@ analyse:
 	src/types.vhd \
 	src/constants.vhd \
 	src/clock.vhd \
+	src/noisifier.vhd \
+	src/msrg.vhd \
 	src/pseudo_noise_sequence_generator.vhd \
 	src/gold_sequence_generator.vhd \
 	src/data_buffer.vhd \
