@@ -35,7 +35,7 @@ architecture structural of lte_signal_generator is
 
   constant SEQUENCE_WIDTH : integer := QAM64_BITS;
 
-  signal i, q : std_logic_vector(31 downto 0);
+  signal i, i_noise, q, q_noise : std_logic_vector(31 downto 0);
 
   signal buffer_enable : std_logic;
 
@@ -64,4 +64,14 @@ begin
     port map (bit_sequence => buffered_bit_sequence,
               i            => i,
               q            => q);
+
+  -- Should be mapped to output of iFFT
+  i_noise_0 : noisifier
+    port map (clk => clk,
+              reset           =>  reset,
+              i_in            =>  i,
+              q_in            =>  q,
+              i_out           =>  i_noise,
+              q_out           =>  q_noise);
+
 end architecture;
