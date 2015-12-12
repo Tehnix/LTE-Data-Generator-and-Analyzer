@@ -1,5 +1,4 @@
-.DEFAULT_GOAL := all
-all: analyse compile simulate wave
+all: generator_gtkwave
 
 GHDL ?= ghdl
 GTKWAVE ?= gtkwave
@@ -25,11 +24,19 @@ analyse:
 compile:
 	$(GHDL) -m --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work lte_signal_generator_test
 
-simulate:
+# Generator/transmitter tasks
+generator: analyse compile
 	./lte_signal_generator_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
 
-wave: simulate
+generator_gtkwave: generator
 	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd --script signals.tcl
+
+# Receiver tasks, if needed
+receiver: analyse compile
+	./lte_signal_receiver_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
+
+receiver_gtkwave: receiver
+	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
 
 sharelatex:
 	rm -f -r $(SHARELATEX_DIR)
