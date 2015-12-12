@@ -4,7 +4,8 @@ use ieee.numeric_std.all;
 use work.constants.all;
 
 entity pseudo_noise_sequence_generator is
-  generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0));
+  generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
+          initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
   port (clk            : in  std_logic;
         reset          : in  std_logic;
         control_signal : in  std_logic;
@@ -12,21 +13,34 @@ entity pseudo_noise_sequence_generator is
 end entity;
 
 architecture behavior of pseudo_noise_sequence_generator is
-  signal lfsr_reg : std_logic_vector(31 downto 0);
+  -- The linear-feedback shift register is initialised with the initial state
+  signal lfsr_reg : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := initial_state;
+
 begin
 
   process (clk, reset)
-    variable lfsr_tap : std_logic;
+    variable lfsr_in : std_logic;
   begin
     if reset = '1' then
-      lfsr_reg <= (others => '1');
+      -- Reset the LFSR to the initial state
+      lfsr_reg <= initial_state;
     elsif rising_edge(clk) then
-      lfsr_tap := lfsr_reg(0) xor lfsr_reg(1) xor lfsr_reg(21) xor lfsr_reg(31);
-      lfsr_reg <= lfsr_reg(30 downto 0) & lfsr_tap;
+      -- Take the output of the LFSR as the starting point of the new input
+      lfsr_in := lfsr_reg(0);
+      -- XOR the input with all the taps, defined by the polynomial
+      for i in POLYNOMIAL_DEGREE-1 downto 1 loop
+        if polynomial(i-1) = 1 then
+          lfsr_in := lfsr_in xor lfsr_reg(i-1);
+        end if;
+      end loop;
+      -- Shift the register, appending the new input
+      lfsr_reg <= lfsr_reg(POLYNOMIAL_DEGREE-2 downto 0) & lfsr_in;
     end if;
   end process;
 
-  data_out <= '0';
+  -- The output of the LFSR will always be the last bit in the LFSR (we shift
+  -- from right towards left)
+  data_out <= lfsr_reg(0);
 
 end architecture;
 
