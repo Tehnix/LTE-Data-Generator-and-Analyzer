@@ -13,24 +13,25 @@ end entity;
 
 architecture behaviorial of iq_mapper is
   constant IQ_map  : IQ_map_t := sample_map_g;
-  signal even, odd : std_logic_vector(modulation_width_g / 2 - 1 downto 0);
+  signal even, odd :
+    std_logic_vector(modulation_width_g / 2 - 1 downto 0) := (others => '0');
 begin
 
   process (bit_sequence)
     variable even_v, odd_v :
-      std_logic_vector(modulation_width_g / 2 - 1 downto 0);
+      std_logic_vector(modulation_width_g / 2 - 1 downto 0) := (others => '0');
 
-    variable i, j : integer;
+    variable j, k : integer;
   begin
-    i := 0;
     j := 0;
+    k := 0;
 
-    while (i <= modulation_width_g / 2) loop
-      even_v(j) := bit_sequence(i);
-      odd_v(j)  := bit_sequence(i + 1);
+    while (j <= modulation_width_g / 2) loop
+      even_v(k) := bit_sequence(j);
+      odd_v(k)  := bit_sequence(j + 1);
 
-      i := i + 2;
-      j := j + 1;
+      j := j + 2;
+      k := k + 1;
     end loop;
 
     even <= even_v;

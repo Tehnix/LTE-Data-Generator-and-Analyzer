@@ -29,7 +29,7 @@ simulate:
 	./lte_signal_generator_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
 
 wave: simulate
-	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
+	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd --script signals.tcl
 
 sharelatex:
 	rm -f -r $(SHARELATEX_DIR)

@@ -1,14 +1,14 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use work.msrg.all;
 
 entity noisifier is
-  port (clk             : in  std_logic;
-        reset           : in  std_logic;
-        i_in            : in  std_logic_vector(31 downto 0);
-        q_in            : in  std_logic_vector(31 downto 0);
-        i_out           : out std_logic_vector(31 downto 0);
-        q_out           : out std_logic_vector(31 downto 0));
+  port (clk   : in  std_logic;
+        reset : in  std_logic;
+        enable : in std_logic;
+        i_in  : in  std_logic_vector(31 downto 0);
+        q_in  : in  std_logic_vector(31 downto 0);
+        i_out : out std_logic_vector(31 downto 0);
+        q_out : out std_logic_vector(31 downto 0));
 end entity;
 
 architecture noise of noisifier is
@@ -18,7 +18,14 @@ architecture noise of noisifier is
   signal pseudo_reg_0, pseudo_reg_1 : std_logic_vector(4 downto 0);
 
   signal pseudo_reg_i, next_pseudo_reg_i,
-         pseudo_reg_q, next_pseudo_reg_q : std_logic_vector(4 downto 0);
+    pseudo_reg_q, next_pseudo_reg_q : std_logic_vector(4 downto 0);
+
+  component msrg is
+    generic (seq_begin : std_logic_vector(4 downto 0));
+    port (clk      : in  std_logic;
+          reset    : in  std_logic;
+          sequence : out std_logic_vector(4 downto 0));
+  end component;
 begin
 
   --           31 30       22
@@ -26,26 +33,34 @@ begin
   -- bit 4, 5, 6, 7 of the mantissa is used to for noise
   i_out <= (i_in(31) xor pseudo_reg_i(4)) &
            i_in(30 downto 20) &
-           i_in(19 downto 16) xor pseudo_reg_i(3 downto 0) &
+           (i_in(19 downto 16) xor pseudo_reg_i(3 downto 0)) &
            i_in(15 downto 0);
 
   q_out <= (q_in(31) xor pseudo_reg_q(4)) &
            q_in(30 downto 20) &
-           q_in(19 downto 16) xor pseudo_reg_q(3 downto 0) &
+           (q_in(19 downto 16) xor pseudo_reg_q(3 downto 0)) &
            q_in(15 downto 0);
 
-  state_controller : process(state, pseudo_reg_0, pseudo_reg_1)
+  state_controller : process(state, enable,
+                             pseudo_reg_0, pseudo_reg_i,
+                             pseudo_reg_1, pseudo_reg_q)
   begin
-    case state is
-      when one =>
-        next_pseudo_reg_i <= pseudo_reg_0;
-        next_pseudo_reg_q <= pseudo_reg_1;
-        next_state        <= two;
-      when two =>
-        next_pseudo_reg_i <= pseudo_reg_1;
-        next_pseudo_reg_q <= pseudo_reg_0;
-        next_state        <= one;
-    end case;
+    next_pseudo_reg_i <= pseudo_reg_i;
+    next_pseudo_reg_q <= pseudo_reg_q;
+    next_state <= state;
+
+    if enable = '1' then
+      case state is
+        when one =>
+          next_pseudo_reg_i <= pseudo_reg_0;
+          next_pseudo_reg_q <= pseudo_reg_1;
+          next_state        <= two;
+        when two =>
+          next_pseudo_reg_i <= pseudo_reg_1;
+          next_pseudo_reg_q <= pseudo_reg_0;
+          next_state        <= one;
+      end case;
+    end if;
   end process;
 
   clock_controller : process(reset, clk)
@@ -63,12 +78,12 @@ begin
 
   i_pseudo_reg_0 : msrg
     generic map (seq_begin => "11001")
-    port map (clk => clk,
-              reset           =>  reset,
-              sequence            =>  pseudo_reg_0);
+    port map (clk      => clk,
+              reset    => reset,
+              sequence => pseudo_reg_0);
   i_pseudo_reg_1 : msrg
     generic map (seq_begin => "01101")
-    port map (clk => clk,
-              reset           =>  reset,
-              sequence            =>  pseudo_reg_1);
+    port map (clk      => clk,
+              reset    => reset,
+              sequence => pseudo_reg_1);
 end architecture;
