@@ -36,5 +36,5 @@ sharelatex:
 	mkdir -p $(shell echo "$(SHARELATEX_DIR)/{vhdl,matlab,python}")
 	cp src/*.vhd $(SHARELATEX_DIR)/vhdl
 	cp tests/*.vhd $(SHARELATEX_DIR)/vhdl
-	cp src/*.m $(SHARELATEX_DIR)/matlab
-	cp src/*.py $(SHARELATEX_DIR)/python
+	cp src/matlab/*.m $(SHARELATEX_DIR)/matlab
+	cp src/python/*.py $(SHARELATEX_DIR)/python
