@@ -3,6 +3,7 @@ all: analyse compile simulate wave
 
 GHDL ?= ghdl
 GTKWAVE ?= gtkwave
+SHARELATEX_DIR = $(HOME)/Dropbox/sharelatex/LTE\ Data\ Generator/src
 
 analyse:
 	$(GHDL) -i \
@@ -27,3 +28,11 @@ simulate:
 
 wave: simulate
 	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
+
+sharelatex:
+	rm -f -r $(SHARELATEX_DIR)
+	mkdir -p $(shell echo "$(SHARELATEX_DIR)/{vhdl,matlab,python}")
+	cp src/*.vhd $(SHARELATEX_DIR)/vhdl
+	cp tests/*.vhd $(SHARELATEX_DIR)/vhdl
+	cp src/*.m $(SHARELATEX_DIR)/matlab
+	cp src/*.py $(SHARELATEX_DIR)/python

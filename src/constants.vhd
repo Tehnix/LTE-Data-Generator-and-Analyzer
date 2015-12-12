@@ -6,10 +6,14 @@ use work.types.all;
 package constants is
   -- Polynomials for the PBRS (Gold Sequence)
   constant POLYNOMIAL_DEGREE : integer := 5;
-  constant PN1_POLYNOMIAL : std_logic_vector(POLYNOMIAL_DEGREE downto 0) := "100101";
-  constant PN2_POLYNOMIAL : std_logic_vector(POLYNOMIAL_DEGREE downto 0) := "111101";
-  constant PN1_INITIAL_STATE : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
-  constant PN2_INITIAL_STATE : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
+  constant PN1_POLYNOMIAL :
+    std_logic_vector(POLYNOMIAL_DEGREE downto 0) := "100101";
+  constant PN2_POLYNOMIAL :
+    std_logic_vector(POLYNOMIAL_DEGREE downto 0) := "111101";
+  constant PN1_INITIAL_STATE :
+    std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
+  constant PN2_INITIAL_STATE :
+    std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
 
   constant QPSK_BITS : integer := 2;
   constant QAM16_BITS : integer := 4;

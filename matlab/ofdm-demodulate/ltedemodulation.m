@@ -1,13 +1,9 @@
-clear;
-cfg = lteTestModel('1.1','1.4MHz')
-waveform = lteTestModelTool(cfg);
-rxGrid = lteOFDMDemodulate(cfg,waveform)
 
-
-info = struct()
-info.Nfft = 128                     % Nfft                    - FFT size
-info.SamplingRate = 30720000 / 2048 * info.Nfft         % SamplingRate            - The sampling rate of the time domain WAVEFORM, given by SamplingRate = 30.72MHz / 2048 * Nfft.
-info.CyclicPrefixLengths = [10 9 9 9 9 9 9 10 9 9 9 9 9 9]  % CyclicPrefixLengths - Cyclic prefix length (in samples) of each OFDM symbol in a subframe.
+waveform = [];
+info = struct();
+info.Nfft = 128;                     % Nfft                    - FFT size
+info.SamplingRate = 30720000 / 2048 * info.Nfft;         % SamplingRate            - The sampling rate of the time domain WAVEFORM, given by SamplingRate = 30.72MHz / 2048 * Nfft.
+info.CyclicPrefixLengths = [10 9 9 9 9 9 9 10 9 9 9 9 9 9];  % CyclicPrefixLengths - Cyclic prefix length (in samples) of each OFDM symbol in a subframe.
 
 %      NRB     Nfft     Windowing     CyclicPrefixLengths (Normal)
 %        6      128             4     [10 9 9 9 9 9 9 10 9 9 9 9 9 9]
@@ -23,8 +19,8 @@ info.CyclicPrefixLengths = [10 9 9 9 9 9 9 10 9 9 9 9 9 9]  % CyclicPrefixLength
 % Ref: http://se.mathworks.com/help/lte/ref/lteofdmmodulate.html
 
 enb = struct();
-enb.NDLRB = 6                       % NDLRB                   - Number of downlink resource blocks (Downlink bandwidth configuration) 
-enb.CellRefP = 1                    % CellRefP                - Number of transmit antenna Ports
+enb.NDLRB = 6;                       % NDLRB                   - Number of downlink resource blocks (Downlink bandwidth configuration) 
+enb.CellRefP = 1;                    % CellRefP                - Number of transmit antenna Ports
 
 cpFraction = 0.55;                  %cpFraction               - cpFraction is between 0 and 1, with 0 representing the start of the cyclic prefix and 1 representing the end of the cyclic prefix. The default value is 0.55, which allows for the default level of windowing
 
@@ -54,7 +50,7 @@ totalActiveSC=enb.NDLRB*12;
 %   (12*NDLRB), M is the number of OFDM symbols in a subframe (14 for
 %   normal cyclic prefix and 12 for extended cyclic prefix) and CellRefP is
 %   the number of transmit antenna ports.
-D=[totalActiveSC 14 enb.CellRefP]
+D=[totalActiveSC 14 enb.CellRefP];
 D(2)=D(2)*nSubframes;    
 reGrid=zeros(D);    
 idx=0:nFFT-1;   
@@ -93,10 +89,9 @@ for subframe=0:nSubframes-1
             %OFDMSymbolIndices Generates indices for a given OFDM symbol of a resource array.
             %   IND = OFDMSymbolIndices(GRID,SYMBOL) gives the indices for OFDM symbol number
             %   SYMBOL of the resource array GRID, in per-antenna linear indices form. 
-            symbol = i;
             nSCs = size(reGrid,1);
             nAnts = size(reGrid,3);
-            firstSCs = sub2ind(size(reGrid),ones(1,nAnts),repmat(symbol,1,nAnts),1:nAnts);
+            firstSCs = sub2ind(size(reGrid),ones(1,nAnts),repmat(i,1,nAnts),1:nAnts);
             ind = repmat(firstSCs,nSCs,1)+repmat((0:nSCs-1).',1,nAnts);
             
             % Assign the active subcarriers into the appropriate column
