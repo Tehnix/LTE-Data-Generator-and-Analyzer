@@ -27,3 +27,11 @@ simulate:
 
 wave: simulate
 	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
+
+sharelatex:
+	sharelatex_dir=~/Dropbox/sharelatex/LTE\ Data\ Generator/src
+	rm -r $sharelatex_dir
+	mkdir -p $sharelatex_dir/vhdl $sharelatex_dir/matlab
+	cp src/*.vhd $sharelatex_dir/vhdl
+	cp tests/*.vhd $sharelatex_dir/vhdl
+	cp src/*.m $sharelatex_dir/matlab
