@@ -9,13 +9,14 @@ entity gold_sequence_generator is
         reset          : in  std_logic;
         control_signal : in  std_logic;
         buffer_enable  : out std_logic;
-        bit_sequence   : out std_logic_vector(sequence_width_g - 1 downto 0));
+        bit_sequence   : buffer std_logic_vector(sequence_width_g - 1 downto 0));
 end entity;
 
 architecture behavior of gold_sequence_generator is
 
   component pseudo_noise_sequence_generator
-    generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0));
+    generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
+				 initial_state : std_logic_vector(POLYNOMIAL_DEGREE downto 0));
     port (clk      : in std_logic;
           reset    : in std_logic;
           data_out : out std_logic);
@@ -59,7 +60,6 @@ begin
     variable data_out : std_logic := '0';
   begin
     if reset = '1' then
-      bit_counter <= 0;
       delay_counter <= (others => '0');
     elsif rising_edge(clk) then
       if control_signal = '1' then

@@ -29,7 +29,7 @@ begin
       lfsr_in := lfsr_reg(0);
       -- XOR the input with all the taps, defined by the polynomial
       for i in POLYNOMIAL_DEGREE-1 downto 1 loop
-        if polynomial(i-1) = 1 then
+        if polynomial(i-1) = '1' then
           lfsr_in := lfsr_in xor lfsr_reg(i-1);
         end if;
       end loop;
