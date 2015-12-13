@@ -13,6 +13,23 @@
 *.summary
 *.vhd.bak
 
+
+*.mti
+*.qdb
+*.qdb
+*.mpf
+_info
+*.qpg
+*.qtl
+_vmake
+*.bak*
+*.do
+*.vht
+msim_transcript
+modelsim.ini
+vsim.wlf
+
+
 .qsys_edit/
 db/
 VHDL/Quartus/incremental_db/README
