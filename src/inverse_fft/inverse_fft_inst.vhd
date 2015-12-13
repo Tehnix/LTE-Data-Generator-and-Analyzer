@@ -1,4 +1,4 @@
-	component fft is
+	component inverse_fft is
 		port (
 			clk          : in  std_logic                     := 'X';             -- clk
 			reset_n      : in  std_logic                     := 'X';             -- reset_n
@@ -9,7 +9,7 @@
 			sink_eop     : in  std_logic                     := 'X';             -- sink_eop
 			sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_real
 			sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_imag
-			fftpts_in    : in  std_logic_vector(11 downto 0) := (others => 'X'); -- fftpts_in
+			fftpts_in    : in  std_logic_vector(7 downto 0)  := (others => 'X'); -- fftpts_in
 			source_valid : out std_logic;                                        -- source_valid
 			source_ready : in  std_logic                     := 'X';             -- source_ready
 			source_error : out std_logic_vector(1 downto 0);                     -- source_error
@@ -17,11 +17,11 @@
 			source_eop   : out std_logic;                                        -- source_eop
 			source_real  : out std_logic_vector(31 downto 0);                    -- source_real
 			source_imag  : out std_logic_vector(31 downto 0);                    -- source_imag
-			fftpts_out   : out std_logic_vector(11 downto 0)                     -- fftpts_out
+			fftpts_out   : out std_logic_vector(7 downto 0)                      -- fftpts_out
 		);
-	end component fft;
+	end component inverse_fft;
 
-	u0 : component fft
+	u0 : component inverse_fft
 		port map (
 			clk          => CONNECTED_TO_clk,          --    clk.clk
 			reset_n      => CONNECTED_TO_reset_n,      --    rst.reset_n
