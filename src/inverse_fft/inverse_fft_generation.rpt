@@ -1,0 +1,28 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /media/sf_martinjlowm/Documents/34349_fpga_design_for_communication_systems/lte_data_generator_analyzer/inverse_fft.qsys --block-symbol-file --output-directory=/media/sf_martinjlowm/Documents/34349_fpga_design_for_communication_systems/lte_data_generator_analyzer/src/inverse_fft --family="Cyclone V" --part=5CGXFC7C7F23C8
+Progress: Loading lte_data_generator_analyzer/inverse_fft.qsys
+Progress: Reading input file
+Progress: Adding fft_ii_0 [altera_fft_ii 15.0]
+Progress: Parameterizing module fft_ii_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: ip-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /media/sf_martinjlowm/Documents/34349_fpga_design_for_communication_systems/lte_data_generator_analyzer/inverse_fft.qsys --synthesis=VHDL --output-directory=/media/sf_martinjlowm/Documents/34349_fpga_design_for_communication_systems/lte_data_generator_analyzer/src/inverse_fft/synthesis --family="Cyclone V" --part=5CGXFC7C7F23C8
+Progress: Loading lte_data_generator_analyzer/inverse_fft.qsys
+Progress: Reading input file
+Progress: Adding fft_ii_0 [altera_fft_ii 15.0]
+Progress: Parameterizing module fft_ii_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: inverse_fft: Generating inverse_fft "inverse_fft" for QUARTUS_SYNTH
+Info: fft_ii_0: "inverse_fft" instantiated altera_fft_ii "fft_ii_0"
+Info: inverse_fft: Done "inverse_fft" with 2 modules, 67 files
+Info: ip-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
