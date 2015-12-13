@@ -13,7 +13,7 @@ package constants is
   constant PN1_INITIAL_STATE :
     std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
   constant PN2_INITIAL_STATE :
-    std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "10010";
+    std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := "11110";
 
   constant QPSK_BITS : integer := 2;
   constant QAM16_BITS : integer := 4;
