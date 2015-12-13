@@ -14,7 +14,7 @@ begin
   process(reset, clk)
   begin
     if reset = '1' then
-      lfsr_reg(4 downto 0) <= seq_begin;
+      lfsr_reg <= "000" & seq_begin;
     elsif rising_edge(clk) then
       lfsr_reg(7) <= lfsr_reg(0);
       lfsr_reg(6) <= lfsr_reg(7) xor lfsr_reg(0);

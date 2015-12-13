@@ -32,12 +32,6 @@ vsim.wlf
 
 .qsys_edit/
 db/
-VHDL/Quartus/incremental_db/README
-
-
-fft.sopcinfo
-src/fft/*
-!src/fft/*.vhd
 work-obj*.cf
 simulation_results.vcdgz
 lte_signal_generator_test
