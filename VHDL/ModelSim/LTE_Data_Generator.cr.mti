@@ -1,9 +1,0 @@
-C:/Users/MadsEmil/Documents/GitHub/LTE-Data-Generator-and-Analyzer/VHDL/ModelSim/PRBS_LFSR.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\MadsEmil\Documents\GitHub\LTE-Data-Generator-and-Analyzer\VHDL\ModelSim\PRBS_LFSR.vhd}
-Model Technology ModelSim ALTERA vcom 10.4b Compiler 2015.05 May 27 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity prbs
--- Compiling architecture behavior of prbs
-
-} {} {}}

@@ -1,0 +1,105 @@
+Oversigt over kommandoer og operationer for anvendelse
+af MATLAB i kursus 34310.
+
+Version 23/2/2011
+Kan blive opdateret når nye anvendelser konstateres
+Kommentarer er meget velkomne
+
+Side 	  refererer til sidenummer i noter
+filnavn.m refererer til anvendelse i en m-fil publiceret
+          på CampusNet efter anvendelse
+
+
+Generelt
+F1	- hjælp, side 8
+help	- hjælp, side 8
+lookfor - hjælp, side 8
+
+Tal og matricer
+[] , ;	- oprettelse af matricer, side 9 - 10
+*i *j	- kompleks imaginærdel, side 9
+e	- eksponentdel af flydende tal, side 9
+:	- specifikation af talfølge, side 10
+:	- en hel række eller søjle, side 10
+
+end	- sidste element i en vektor, side 10
+eye	- enhedsmatrix, side 10
+length	- længde af  vektor, side 11
+ones	- matrix med 1, side 10
+size	- størrelse for matrix, side 11
+zeros	- matrix med 0, side 10
+
+eps	- konstant, præcision, side 26
+pi	- konstant pi, side 9
+realmax	- konstant, største reelle tal, side 26
+realmin	- konstant, mindste reelle tal, side 26
+
+
+Regneoperationer og matrixmanipulationer
++ - * / - almindelig regning, side 9 og 11 - 12
+^	- potensopløftning, side 12
+.	- elementvise operationer, side 12
+'	- transponering af matrix, side 11
+fliplr	- vend vektor, side 13
+reshape	- omformning af matrix, side 72
+
+Funktioner
+abs	- absolutværdi, side 13
+angle	- vinkel (argument) for komplekst tal, side 13
+ceil	- oprunding, Ex7.m
+conv	- foldning af vektorer, Ex2 og side 57
+cos	- cosinus, side 13
+exp	- naturlig exponentialfunktion, side 13
+fft	- Fouriertransformation, side 35
+fftshift- Omordning af fouriertransformerede, side 35
+ifft	- Invers Fouriertransformation, side 36
+imag	- imaginærværdi, side 9
+log	- naturlig logaritme, side 13
+log10	- 10-tals logaritme, side 13
+max	- største element i matrix, side 13
+mean	- middelværdi (gennemsnit) af elementer, side 13
+min	- mindste element i matrix, side 13
+randn	- normalfordelte data, side 66
+real	- realværdi, side 9
+rref	- gauss-elimineret ligningssystem, Ex1.m
+sign	- fortegn, side 13
+sin	- sinus, side 13
+sqrt	- kvadratrod, side 9
+sum	- sum af elementer, side 13
+
+Afvikling af kommandoer og scripts
+...	- forlængelse af komandolinje til næste linje, side 77
+;	- undertryk udskrift fra kommando, side 9, Eks2_2.m
+edit	- editering af script (m-file), side 16
+else	- del af beslutning, side 18, Eks2_2.m
+elseif	- del af beslutning, side 18, Eks2_2.m
+end	- afslutning på løkker og beslutninger, side 17-18, Eks2_2.m
+for	- løkke, side 17, Eks2_2.m
+function - funktion, side 16, Eks2_2.m
+if	- beslutning, side 18, Eks2_2.m
+input	- stop og vent på indtastning af tal, Eks2_2.m
+pause	- stop udførelse og vent på tasttryk, side 18, Eks2_2.m
+return  - returnering fra funktion, side 16, fsinusgraf.m
+while	- løkke, side 17, Eks2_2.m
+
+Udskrift og grafer
+display - udskriv (tekst) på skærm, Eks2_2.m
+eyediagram - speciel graf for kommunikation, side 78
+figure	- opretter nyt grafvindue, side 15
+format  - styrer udskriftsformat, side 9-10
+get	- se egenskaber for grafer eller dele heraf, side 15
+grid off- fjern net fra graf, side 15
+grid on	- tilføj net på graf, side 15
+hist	- histogram, Ex6.m
+hold off- frigør tidligere graf, side 15
+hold on	- hold på tidligere graf, side 15
+loglog	- logaritmiske akser, side 58
+mesh    - 3-dimensional graf, side 14
+plot	- plot graf, side 14
+semilogx- semilogaritmisk x-akse, side 58
+semilogy- som semilogx
+set	- ændring af egenskaber for grafer eller dele heraf, side 15
+stem	- graf med "pinde", side 14
+text	- tekst på graf, side 14
+xlabel	- tekst til x-akse, side 14
+ylabel	- tekst til y-akse, side 14

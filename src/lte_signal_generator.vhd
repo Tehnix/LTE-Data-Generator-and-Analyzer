@@ -25,6 +25,16 @@ architecture structural of lte_signal_generator is
           data_out : out std_logic_vector(data_width_g - 1 downto 0));
   end component;
 
+  component noisifier is
+    port (clk    : in  std_logic;
+          reset  : in  std_logic;
+          enable : in  std_logic;
+          i_in   : in  std_logic_vector(31 downto 0);
+          q_in   : in  std_logic_vector(31 downto 0);
+          i_out  : out std_logic_vector(31 downto 0);
+          q_out  : out std_logic_vector(31 downto 0));
+  end component;
+
   component iq_mapper
     generic (sample_map_g       : iq_map_t;
              modulation_width_g : integer);
@@ -35,7 +45,7 @@ architecture structural of lte_signal_generator is
 
   constant SEQUENCE_WIDTH : integer := QAM64_BITS;
 
-  signal i, q : std_logic_vector(31 downto 0);
+  signal i, i_noise, q, q_noise : std_logic_vector(31 downto 0);
 
   signal buffer_enable : std_logic;
 
@@ -64,4 +74,15 @@ begin
     port map (bit_sequence => buffered_bit_sequence,
               i            => i,
               q            => q);
+
+  -- Should be mapped to output of iFFT
+  i_noise_0 : noisifier
+    port map (clk    => clk,
+              reset  => reset,
+              enable => buffer_enable,
+              i_in   => i,
+              q_in   => q,
+              i_out  => i_noise,
+              q_out  => q_noise);
+
 end architecture;

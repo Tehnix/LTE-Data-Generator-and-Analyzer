@@ -1,5 +1,4 @@
-.DEFAULT_GOAL := all
-all: analyse compile simulate wave
+all: generator_gtkwave
 
 GHDL ?= ghdl
 GTKWAVE ?= gtkwave
@@ -14,6 +13,8 @@ analyse:
 	src/types.vhd \
 	src/constants.vhd \
 	src/clock.vhd \
+	src/noisifier.vhd \
+	src/msrg.vhd \
 	src/pseudo_noise_sequence_generator.vhd \
 	src/gold_sequence_generator.vhd \
 	src/data_buffer.vhd \
@@ -23,10 +24,18 @@ analyse:
 compile:
 	$(GHDL) -m --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work lte_signal_generator_test
 
-simulate:
+# Generator/transmitter tasks
+generator: analyse compile
 	./lte_signal_generator_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
 
-wave: simulate
+generator_gtkwave: generator
+	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd --script signals.tcl
+
+# Receiver tasks, if needed
+receiver: analyse compile
+	./lte_signal_receiver_test --stop-time=5000ns --vcdgz=simulation_results.vcdgz
+
+receiver_gtkwave: receiver
 	gunzip --stdout simulation_results.vcdgz | $(GTKWAVE) --vcd
 
 sharelatex:
@@ -34,5 +43,5 @@ sharelatex:
 	mkdir -p $(shell echo "$(SHARELATEX_DIR)/{vhdl,matlab,python}")
 	cp src/*.vhd $(SHARELATEX_DIR)/vhdl
 	cp tests/*.vhd $(SHARELATEX_DIR)/vhdl
-	cp src/*.m $(SHARELATEX_DIR)/matlab
-	cp src/*.py $(SHARELATEX_DIR)/python
+	cp src/matlab/*.m $(SHARELATEX_DIR)/matlab
+	cp src/python/*.py $(SHARELATEX_DIR)/python
