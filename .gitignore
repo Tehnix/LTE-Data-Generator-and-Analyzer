@@ -29,6 +29,8 @@ msim_transcript
 modelsim.ini
 vsim.wlf
 
+.vimrc
+.DS_Store
 
 .qsys_edit/
 db/

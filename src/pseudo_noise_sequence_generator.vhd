@@ -5,7 +5,7 @@ use work.constants.all;
 
 entity pseudo_noise_sequence_generator is
   generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
-          initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
+           initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
   port (clk            : in  std_logic;
         reset          : in  std_logic;
         control_signal : in  std_logic;
@@ -14,7 +14,8 @@ end entity;
 
 architecture behavior of pseudo_noise_sequence_generator is
   -- The linear-feedback shift register is initialised with the initial state
-  signal lfsr_reg : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := initial_state;
+  signal lfsr_reg
+    : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0) := initial_state;
 
 begin
 

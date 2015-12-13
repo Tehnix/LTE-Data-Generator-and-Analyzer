@@ -29,14 +29,12 @@ def pseudoNoise(polynomial, initial_state, output=False):
         # The output is the last element of the shift register
         lfsr_out = lfsr_reg[0]
 
-        # FOR WHOM IT MAY CONCERN: Here is where I probably fuck up
         # Calculate the new input for the LFSR, by xor'ing it with the taps
         lfsr_in = lfsr_reg[0]
         # We loop from after the last element, and then until the first one
         for i in range(1, len(polynomial)):
             if polynomial[i-1] == 1:
                 lfsr_in = xor(lfsr_in, lfsr_reg[i-1])
-        # END OF FUCKING UP
 
         # Shift the register
         lfsr_reg = lfsr_reg[1:len(polynomial)-1] + [lfsr_in]
@@ -75,7 +73,7 @@ def goldSequenceGenerator(sequence_width_g):
             pn2_data_out = next(pn2)
             data_out = xor(pn1_data_out, pn2_data_out)
             # Shift the output into the bit sequence
-            bit_sequence = bit_sequence[0:sequence_width_g - 1] + [data_out]
+            bit_sequence = bit_sequence[1:sequence_width_g] + [data_out]
             # Increment the delay counter
             delay_counter += 1
         yield bit_sequence
@@ -83,5 +81,5 @@ def goldSequenceGenerator(sequence_width_g):
 
 if __name__ == '__main__':
     gsg = goldSequenceGenerator(4)
-    for i in range(0, 10):
+    for i in range(0, 16):
         print(next(gsg))

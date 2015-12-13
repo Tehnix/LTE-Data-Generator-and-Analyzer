@@ -16,7 +16,7 @@ architecture behavior of gold_sequence_generator is
 
   component pseudo_noise_sequence_generator
     generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
-				 initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
+				     initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
     port (clk      : in std_logic;
           reset    : in std_logic;
           data_out : out std_logic);
