@@ -23,8 +23,9 @@ analyse:
 	src/cyclic_prefix.vhd \
 	src/subcarrier_controller.vhd \
 	src/inverse_fft/synthesis/inverse_fft.vhd \
-	src/tx_fifo.vhd \
 	tests/lte_signal_generator_test.vhd
+
+# src/tx_fifo.vhd \
 
 compile:
 	$(GHDL) -m --ieee=synopsys --warn-no-vital-generic --workdir=simu --work=work lte_signal_generator_test
