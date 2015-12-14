@@ -74,8 +74,19 @@ architecture structural of lte_signal_generator is
           reset          : in  std_logic;
           start_of_input : in  std_logic;
           end_of_input   : in  std_logic;
+          tx_controller_cp : out std_logic;
           time_i, time_q : out std_logic_vector(31 downto 0);
           time_prefixed  : out std_logic_vector(63 downto 0));
+  end component;
+
+  component tx_controller is
+    port (fifo_full : in std_logic;
+          halt : out std_logic;
+          start_of_packet_i : in std_logic;
+          end_of_packet_i : in std_logic;
+          start_of_packet_o : out std_logic;
+          end_of_packet_o : out std_logic;
+          transmit  : out std_logic);
   end component;
 
   component tx_fifo is
@@ -120,7 +131,19 @@ architecture structural of lte_signal_generator is
     tx_controller_out_sop, tx_controller_out_eop : std_logic;
 
   signal tx_controller_halt : std_logic;
+
+  signal tx_controller_fifo_write, tx_controller_read_request : std_logic;
+
+  signal v_t : std_logic_vector(63 downto 0);
+
+  signal v_i, v_q : std_logic_vector(31 downto 0);
+
+  signal fifo_full : std_logic;
+
 begin
+
+  v_i <= v_t(31 downto 0);
+  v_q <= v_t(63 downto 32);
 
   i_prbs_0 : gold_sequence_generator
     generic map (sequence_width_g => SEQUENCE_WIDTH)
@@ -182,6 +205,7 @@ begin
               reset          => reset,
               start_of_input => tx_controller_in_sop,
               end_of_input   => tx_controller_in_eop,
+              tx_controller_cp => tx_controller_fifo_write,
               time_i         => time_i, time_q => time_q,
               time_prefixed  => time_cp);
 
@@ -189,26 +213,27 @@ begin
     port map (data    => time_cp,
               clock   => clk,           -- 1.4MHZ <- fisk
               rdreq   => tx_controller_read_request,
-              wrreq   => tx_controller_write_request,
+              wrreq   => tx_controller_fifo_write,
               q       => v_t,
               rdempty => open,
-              wrfull  => tx_fifo_full);
+              wrfull  => fifo_full);
 
   i_tx_controller_0 : tx_controller
-    port map (fifo_full       => tx_fifo_full,
+    port map (fifo_full       => fifo_full,
               halt            => tx_controller_halt,
-              start_of_packet => tx_controller_in_sop,
-              end_of_packet   => tx_controller_in_eop,
-              start_of_packet => tx_controller_out_sop,
-              end_of_packet   => tx_controller_out_eop);
+              start_of_packet_i => tx_controller_in_sop,
+              end_of_packet_i   => tx_controller_in_eop,
+              start_of_packet_o => tx_controller_out_sop,
+              end_of_packet_o   => tx_controller_out_eop,
+              transmit   => tx_controller_read_request);
 
   -- Should be mapped to output of iFFT
   i_noise_0 : noisifier
     port map (clk    => clk,            -- HERPDERP
               reset  => reset,
               enable => buffer_enable,
-              i_in   => i,
-              q_in   => q,
+              i_in   => v_i,
+              q_in   => v_q,
               i_out  => i_noise,
               q_out  => q_noise);
 
