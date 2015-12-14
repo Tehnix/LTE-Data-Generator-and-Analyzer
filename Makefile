@@ -19,6 +19,11 @@ analyse:
 	src/gold_sequence_generator.vhd \
 	src/data_buffer.vhd \
 	src/iq_mapper.vhd \
+	src/functions.vhd \
+	src/cyclic_prefix.vhd \
+	src/subcarrier_controller.vhd \
+	src/inverse_fft/synthesis/inverse_fft.vhd \
+	src/tx_fifo.vhd \
 	tests/lte_signal_generator_test.vhd
 
 compile:

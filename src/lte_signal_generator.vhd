@@ -17,14 +17,6 @@ architecture structural of lte_signal_generator is
           bit_sequence  : out std_logic_vector(sequence_width_g - 1 downto 0));
   end component;
 
-  component data_buffer is
-    generic (data_width_g : integer);
-    port (clk      : in  std_logic;
-          enable   : in  std_logic;
-          data_in  : in  std_logic_vector(data_width_g - 1 downto 0);
-          data_out : out std_logic_vector(data_width_g - 1 downto 0));
-  end component;
-
   component iq_mapper is
     generic (sample_map_g       : iq_map_t;
              modulation_width_g : integer);
@@ -73,31 +65,38 @@ architecture structural of lte_signal_generator is
   signal bit_sequence, buffered_bit_sequence :
     std_logic_vector(SEQUENCE_WIDTH - 1 downto 0);
 
+  signal iq_prefixed : std_logic_vector(63 downto 0);
+
 begin
+
+  -- I/Q input to FIFO
+  iq_prefixed <= time_i_prefixed & time_q_prefixed;
 
   i_prbs_0 : pseudo_random_bit_sequence
     generic map (sequence_width_g => SEQUENCE_WIDTH)
     port map (clk           => clk,
+              halt => tx_controller_halt,
               reset         => reset,
               buffer_enable => buffer_enable,
               bit_sequence  => bit_sequence);
 
-  i_buffer_0 : data_buffer
-    generic map (data_width_g => SEQUENCE_WIDTH)
-    port map (clk      => clk,
-              enable   => buffer_enable,
-              data_in  => bit_sequence,
-              data_out => buffered_bit_sequence);
-
   i_iq_mapper_qam64 : iq_mapper
     generic map (sample_map_g       => QAM64_IQ_MAP,
                  modulation_width_g => SEQUENCE_WIDTH)
-    port map (bit_sequence => buffered_bit_sequence,
+    port map (halt => tx_controller_halt,
+              bit_sequence => buffered_bit_sequence,
               i            => i,
               q            => q);
 
+  --i_digit_reverter_0 : digit_reverter
+  --  generic map (radix       => 2)      -- ignore radix for now and assume 2
+  --  port map (i            => i,
+  --            q            => q,
+  --            i_reverted => freq_i,
+  --            q_reverted => freq_q);
+
   i_inverse_fft_0 : inverse_fft
-    port map (clk          => clk_1_4mhz,
+    port map (clk          => clk,
               reset_n      => reset,
               sink_valid   => tx_controller_out_valid,
               sink_ready   => tx_controller_out_ready,
@@ -116,14 +115,35 @@ begin
               source_imag  => time_q,
               fftpts_out   => open);
 
+  i_cyclic_prefix_0 : cyclic_prefix
+    generic map (input_size     => FFT_SIZE,
+                 slot_width     => SLOT_WIDTH,
+                 cp_short_length => (FFT_SIZE / 128) * 10 - (FFT_SIZE / 128),
+                 cp_long_length  => (FFT_SIZE / 128) * 10)
+    port map (clk => clk,
+              reset => reset,
+              start_of_input => tx_controller_in_sop,
+              end_of_input => tx_controller_in_eop,
+              time_i => time_i, time_q => time_q,
+              time_prefixed => time_cp);
+
+  i_cp_fifo_0 : tx_fifo
+    port map (data    => time_cp,
+              clock   => clk_1_4mhz,
+              rdreq   => fifo_read_request,
+              wrreq   => fifo_write_request,
+              q       => v_t,
+              rdempty => open,
+              wrfull  => tx_controller_halt);
+
   -- Should be mapped to output of iFFT
   i_noise_0 : noisifier
-  port map (clk    => clk,
-            reset  => reset,
-            enable => buffer_enable,
-            i_in   => i,
-            q_in   => q,
-            i_out  => i_noise,
-            q_out  => q_noise);
+    port map (clk    => clk_1_4mhz,
+              reset  => reset,
+              enable => buffer_enable,
+              i_in   => i,
+              q_in   => q,
+              i_out  => i_noise,
+              q_out  => q_noise);
 
 end architecture;

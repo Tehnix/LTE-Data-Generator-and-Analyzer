@@ -7,12 +7,13 @@ entity iq_mapper is
   generic (sample_map_g       : IQ_map_t;
            modulation_width_g : integer);
   port (bit_sequence : in  std_logic_vector(modulation_width_g - 1 downto 0);
+        enable       : in  std_logic;
         i            : out std_logic_vector(31 downto 0);
         q            : out std_logic_vector(31 downto 0));
 end entity;
 
 architecture behaviorial of iq_mapper is
-  constant IQ_map  : IQ_map_t := sample_map_g;
+  constant IQ_map : IQ_map_t := sample_map_g;
   signal even, odd :
     std_logic_vector(modulation_width_g / 2 - 1 downto 0) := (others => '0');
 begin
@@ -33,12 +34,12 @@ begin
       j := j + 2;
       k := k + 1;
     end loop;
-
-    even <= even_v;
-    odd  <= odd_v;
   end process;
 
-  i <= IQ_map(to_integer(unsigned(even)));
-  q <= IQ_map(to_integer(unsigned(odd)));
+  i <= IQ_map(to_integer(unsigned(even))) when enable = '1'
+       else (others => '0');
+
+  q <= IQ_map(to_integer(unsigned(odd))) when enable = '1'
+       else (others => '0');
 
 end architecture;

@@ -37,4 +37,10 @@ package constants is
      x"bf45821f",
      x"bf8a417c");
 
+  constant FFT_SIZE : integer := 128;
+
+  -- Resource grid constants
+  constant SLOT_WIDTH : integer := 7;
+  constant ACTIVE_SUBCARRIERS : integer := 72;
+
 end constants;

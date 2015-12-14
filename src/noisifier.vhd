@@ -15,29 +15,27 @@ architecture noise of noisifier is
   type state_t is (one, two);
   signal state, next_state : state_t;
 
-  signal pseudo_reg_0, pseudo_reg_1 : std_logic_vector(4 downto 0);
+  signal pseudo_reg_0, pseudo_reg_1 : std_logic_vector(3 downto 0);
 
   signal pseudo_reg_i, next_pseudo_reg_i,
-    pseudo_reg_q, next_pseudo_reg_q : std_logic_vector(4 downto 0);
+    pseudo_reg_q, next_pseudo_reg_q : std_logic_vector(3 downto 0);
 
   component msrg is
-    generic (seq_begin : std_logic_vector(4 downto 0));
+    generic (seq_begin : std_logic_vector(3 downto 0));
     port (clk      : in  std_logic;
           reset    : in  std_logic;
-          sequence : out std_logic_vector(4 downto 0));
+          sequence : out std_logic_vector(3 downto 0));
   end component;
 begin
 
   --           31 30       22
   -- Float 32: s  eeeeeeee mmmmmmmmmmmmmmmmmmmmmmm
-  -- bit 4, 5, 6, 7 of the mantissa is used to for noise
-  i_out <= (i_in(31) xor pseudo_reg_i(4)) &
-           i_in(30 downto 20) &
+  -- bit 4, 5, 6, 7 of the mantissa is used to apply "noise"
+  i_out <= i_in(31 downto 20) &
            (i_in(19 downto 16) xor pseudo_reg_i(3 downto 0)) &
            i_in(15 downto 0);
 
-  q_out <= (q_in(31) xor pseudo_reg_q(4)) &
-           q_in(30 downto 20) &
+  q_out <= q_in(31 downto 20) &
            (q_in(19 downto 16) xor pseudo_reg_q(3 downto 0)) &
            q_in(15 downto 0);
 

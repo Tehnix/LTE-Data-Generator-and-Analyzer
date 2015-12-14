@@ -1,30 +1,32 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-entity tx_contr is
-port (
-        tx_ctrl_sig : out std_logic;
-        rset        : in std_logic;
-        tx_clk      : in std_logic
+entity tx_controller is
+  generic ()
+  port (clk         : in  std_logic;
+        reset       : in  std_logic;
+        transmit_fifo_full   : in  std_logic;
+        halt        : out  std_logic);
+end entity;
 
-
-);
-end tx_contr;
-
-architecture behavior of tx_contr is
-  signal tx_ctrl_intern : std_logic;
+architecture fsmd of tx_controller is
 
 begin
-  process(tx_clk)
+
+  process (transmit_fifo_full)
   begin
-    if RISING_EDGE(tx_clk) then
-      tx_ctrl_intern <= '1';
-      if tx_ctrl_intern = '1' then
-        tx_ctrl_intern <= '0';
-      end if;
+    halt <= '1';
+  end process;
+
+  process (clk, reset)
+  begin
+    if reset = '1' then
+      subcarrier_counter <= (others => '0');
+      state              <= lhs_guard;
+    elsif rising_edge(clk) then
+      subcarrier_counter <= next_subcarrier_counter;
     end if;
   end process;
 
-tx_ctrl_sig <= tx_ctrl_intern;
-
-end behavior;
+end architecture;

@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity msrg is
-  generic (seq_begin : std_logic_vector(4 downto 0));
+  generic (seq_begin : std_logic_vector(3 downto 0));
   port (clk      : in  std_logic;
         reset    : in  std_logic;
-        sequence : out std_logic_vector(4 downto 0));
+        sequence : out std_logic_vector(3 downto 0));
 end msrg;
 
 architecture behavior of msrg is
@@ -27,6 +27,6 @@ begin
     end if;
   end process;
 
-  sequence <= lfsr_reg(4 downto 0);
+  sequence <= lfsr_reg(3 downto 0);
 
 end behavior;
