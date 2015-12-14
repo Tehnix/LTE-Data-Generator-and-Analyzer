@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 use work.constants.all;
 
 entity pseudo_noise_sequence_generator is
-  generic (polynomial : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
+  generic (polynomial    : std_logic_vector(POLYNOMIAL_DEGREE downto 0);
            initial_state : std_logic_vector(POLYNOMIAL_DEGREE-1 downto 0));
   port (clk            : in  std_logic;
         reset          : in  std_logic;

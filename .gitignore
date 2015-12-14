@@ -29,6 +29,7 @@ msim_transcript
 modelsim.ini
 vsim.wlf
 
+.exrc
 .vimrc
 .DS_Store
 
