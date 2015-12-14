@@ -8,7 +8,9 @@ entity subcarrier_controller is
   port (clk         : in  std_logic;
         reset       : in  std_logic;
         halt : in std_logic;
-        data_enable : out std_logic);
+        data_enable : out std_logic;
+        start_of_packet : out std_logic;
+        end_of_packet : out std_logic);
 end entity;
 
 architecture fsmd of subcarrier_controller is
@@ -29,10 +31,14 @@ begin
   begin
     data_enable <= '0';
     next_subcarrier_counter <= subcarrier_counter + 1;
+    next_state <= state;
 
     case state is
       -- Zero padding
       when lhs_guard =>
+        if subcarrier_counter = 0 then
+          start_of_packet <= '1';
+        end if;
 
         if subcarrier_counter = GUARD_BOUNDARY then
           next_subcarrier_counter <= (others => '0');
@@ -56,6 +62,8 @@ begin
       when rhs_guard =>
 
         if subcarrier_counter = GUARD_BOUNDARY then
+          end_of_packet <= '1';
+
           next_subcarrier_counter <= (others => '0');
 
           next_state <= lhs_guard;

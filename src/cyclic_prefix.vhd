@@ -11,6 +11,7 @@ entity cyclic_prefix is
   port (clk                          : in  std_logic;
         reset                        : in  std_logic;
         halt                         : in  std_logic;
+        tx_controller_cp                         : out std_logic;
         start_of_input, end_of_input : in  std_logic;
         time_i, time_q               : in  std_logic_vector(31 downto 0);
         transmit_fifo_write_request  : out std_logic;
@@ -34,11 +35,14 @@ architecture fsmd of cyclic_prefix is
   signal state, next_state : state_t;
 
   -- Count time samples
+  constant TIME_HIGH : integer := log2(input_size);
   signal time_counter, next_time_counter :
-    unsigned(log2(input_size) downto 0);
+    unsigned(TIME_HIGH downto 0);
 
+  -- 3 bits are sufficient for count to 6
+  constant RE_HIGH : integer := (slot_width / 2) - 1;
   signal resource_element_counter, next_resource_element_counter :
-    unsigned(slot_width downto 0);
+    unsigned(RE_HIGH downto 0);
 
   -- FIFO signals
   signal fifo_data_in, fifo_data_out : std_logic_vector(63 downto 0);
@@ -88,7 +92,7 @@ begin
         -- If iFFT signals the end, get ready to extract the long cyclic
         -- prefix from FIFO.
         if end_of_input = '1' then
-          next_time_counter <= cp_long_length;
+          next_time_counter <= to_unsigned(cp_long_length, TIME_HIGH);
           next_state        <= cp_dequeue;
         end if;
 
@@ -104,6 +108,7 @@ begin
           next_state <= cp_short;
         end if;
 
+        -- Increment to next resource element when the iFFT notifies us.
         if end_of_input = '1' then
           next_resource_element_counter <= resource_element_counter + 1;
         end if;
@@ -122,7 +127,7 @@ begin
         -- If iFFT signals the end, get ready to extract the long cyclic
         -- prefix from FIFO.
         if end_of_input = '1' then
-          next_time_counter <= cp_short_length;
+          next_time_counter <= to_unsigned(cp_short_length, TIME_HIGH);
           next_state        <= cp_dequeue;
         end if;
 
@@ -162,7 +167,8 @@ begin
 
   i_cp_fifo_0 : tx_fifo
     port map (data    => fifo_data_in,
-              clock   => clk,
+              rdclk   => clk,
+              wrclk   => clk,
               rdreq   => fifo_read_request,
               wrreq   => fifo_write_request,
               q       => fifo_data_out,

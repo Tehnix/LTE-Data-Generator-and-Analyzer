@@ -75,12 +75,12 @@ begin
   end process;
 
   i_pseudo_reg_0 : msrg
-    generic map (seq_begin => "11001")
+    generic map (seq_begin => "1001")
     port map (clk      => clk,
               reset    => reset,
               sequence => pseudo_reg_0);
   i_pseudo_reg_1 : msrg
-    generic map (seq_begin => "01101")
+    generic map (seq_begin => "1101")
     port map (clk      => clk,
               reset    => reset,
               sequence => pseudo_reg_1);

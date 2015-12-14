@@ -1,4 +1,8 @@
 package functions is
+  function log2( i : natural) return integer;
+end package;
+
+package body functions is
 
   -- Function by TrickyDicky referenced from:
   --   http://www.edaboard.com/thread186363.html
@@ -14,4 +18,4 @@ package functions is
     return ret_val;
   end function;
 
-end package;
+end package body;
