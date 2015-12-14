@@ -38,3 +38,4 @@ db/
 work-obj*.cf
 simulation_results.vcdgz
 lte_signal_generator_test
+VHDL/Quartus/incremental_db/README
