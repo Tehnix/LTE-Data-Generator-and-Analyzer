@@ -8,6 +8,8 @@ vcom -check_synthesis src/types.vhd \
 	src/gold_sequence_generator.vhd \
 	src/subcarrier_controller.vhd \
 	src/iq_mapper.vhd \
+	src/digit_reverter.vhd \
+	src/inverse_fft/synthesis/inverse_fft.vhd \
 	src/lte_signal_generator.vhd \
 	tests/lte_signal_generator_test.vhd
 
@@ -40,6 +42,20 @@ add wave -noupdate -divider -height 28 "IQ Mapper"
 
 add wave -label "Even Index" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_subcarrier_controller_0/i_iq_mapper_qam64/even
 add wave -label "Odd Index" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_subcarrier_controller_0/i_iq_mapper_qam64/odd
+
+add wave -noupdate -divider -height 28 "Digit reverter"
+
+add wave -label "I" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_digit_reverter_0/i_reverted
+add wave -label "Q" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_digit_reverter_0/q_reverted
+
+add wave -noupdate -divider -height 28 "iFFT"
+
+add wave -label "Valid In" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_valid
+add wave -label "I Out" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_real
+add wave -label "Q Out" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_imag
+add wave -label "Valid Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_valid
+add wave -label "SOP Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_sop
+add wave -label "EOP Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_eop
 
 WaveRestoreZoom {0 ps} {100000 ns}
 

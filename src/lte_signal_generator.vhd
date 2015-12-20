@@ -38,33 +38,33 @@ architecture structural of lte_signal_generator is
           end_of_packet   : out std_logic);
   end component;
 
-  --component digit_reverter is
-  --  port (i          : out std_logic_vector(31 downto 0);
-  --        q          : out std_logic_vector(31 downto 0);
-  --        i_reverted : out std_logic_vector(31 downto 0);
-  --        q_reverted : out std_logic_vector(31 downto 0));
-  --end component;
+  component digit_reverter is
+    port (i          : in  float_t;
+          q          : in  float_t;
+          i_reverted : out float_t;
+          q_reverted : out float_t);
+  end component;
 
-  --component inverse_fft is
-  --  port (clk          : in  std_logic                     := 'X';
-  --        reset_n      : in  std_logic                     := 'X';
-  --        sink_valid   : in  std_logic                     := 'X';
-  --        sink_ready   : out std_logic;
-  --        sink_error   : in  std_logic_vector(1 downto 0)  := (others => 'X');
-  --        sink_sop     : in  std_logic                     := 'X';
-  --        sink_eop     : in  std_logic                     := 'X';
-  --        sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X');
-  --        sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X');
-  --        fftpts_in    : in  std_logic_vector(7 downto 0)  := (others => 'X');
-  --        source_valid : out std_logic;
-  --        source_ready : in  std_logic                     := 'X';
-  --        source_error : out std_logic_vector(1 downto 0);
-  --        source_sop   : out std_logic;
-  --        source_eop   : out std_logic;
-  --        source_real  : out std_logic_vector(31 downto 0);
-  --        source_imag  : out std_logic_vector(31 downto 0);
-  --        fftpts_out   : out std_logic_vector(7 downto 0));
-  --end component;
+  component inverse_fft is
+    port (clk          : in  std_logic                     := 'X';
+          reset_n      : in  std_logic                     := 'X';
+          sink_valid   : in  std_logic                     := 'X';
+          sink_ready   : out std_logic;
+          sink_error   : in  std_logic_vector(1 downto 0)  := (others => 'X');
+          sink_sop     : in  std_logic                     := 'X';
+          sink_eop     : in  std_logic                     := 'X';
+          sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X');
+          sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X');
+          fftpts_in    : in  std_logic_vector(7 downto 0)  := (others => 'X');
+          source_valid : out std_logic;
+          source_ready : in  std_logic                     := 'X';
+          source_error : out std_logic_vector(1 downto 0);
+          source_sop   : out std_logic;
+          source_eop   : out std_logic;
+          source_real  : out std_logic_vector(31 downto 0);
+          source_imag  : out std_logic_vector(31 downto 0);
+          fftpts_out   : out std_logic_vector(7 downto 0));
+  end component;
 
   --component cyclic_prefix is
   --  generic (input_size      : integer;
@@ -112,16 +112,16 @@ architecture structural of lte_signal_generator is
 
   constant SEQUENCE_WIDTH : integer := QAM64_BITS;
 
-  signal i, i_noise, q, q_noise : float_t;
+  signal i, q,
+         i_reverted, q_reverted,
+         i_time, q_time,
+         i_noise, q_noise : float_t;
 
   signal bit_sequence : std_logic_vector(SEQUENCE_WIDTH - 1 downto 0);
 
   signal iq_prefixed : std_logic_vector(63 downto 0);
 
   signal time_cp : std_logic_vector(63 downto 0);
-
-  signal freq_i, freq_q : float_t;
-  signal time_i, time_q : float_t;
 
   signal subcarrier_controller_enable : std_logic;
 
@@ -138,12 +138,28 @@ architecture structural of lte_signal_generator is
 
   signal fifo_full : std_logic;
 
+  -- iFFT signals
+  signal valid_freq, ready_freq, sop_freq, eop_freq,
+    valid_time, ready_time, sop_time, eop_time : std_logic;
+
+  signal error_freq, error_time : std_logic_vector(1 downto 0);
+  signal fftpts_in, fftpts_out : std_logic_vector(7 downto 0);
+
+
 begin
 
   v_i <= v_t(31 downto 0);
   v_q <= v_t(63 downto 32);
 
   tx_controller_halt <= '0';
+
+  error_freq <= "00";
+
+  valid_freq <= '1';
+
+  ready_time <= '1';
+
+  fftpts_in <= (others => '0');
 
   i_gsg_0 : gold_sequence_generator
     generic map (polynomial_degree_g => POLYNOMIAL_DEGREE,
@@ -163,36 +179,36 @@ begin
               reset           => reset,
               halt            => tx_controller_halt,
               bit_sequence    => bit_sequence,
-              start_of_packet => tx_controller_in_sop,
+              start_of_packet => sop_freq,
               i               => i,
               q               => q,
-              end_of_packet   => tx_controller_in_eop);
+              end_of_packet   => eop_freq);
 
-  --i_digit_reverter_0 : digit_reverter
-  --  port map (i          => i,
-  --            q          => q,
-  --            i_reverted => freq_i,
-  --            q_reverted => freq_q);
+  i_digit_reverter_0 : digit_reverter
+    port map (i          => i,
+              q          => q,
+              i_reverted => i_reverted,
+              q_reverted => q_reverted);
 
-  --i_inverse_fft_0 : inverse_fft
-  --  port map (clk          => clk,
-  --            reset_n      => reset,
-  --            sink_valid   => open,     --tx_controller_out_valid,
-  --            sink_ready   => open,     --tx_controller_out_ready,
-  --            sink_error   => open,     --tx_controller_out_error,
-  --            sink_sop     => tx_controller_out_sop,
-  --            sink_eop     => tx_controller_out_eop,
-  --            sink_real    => freq_i,
-  --            sink_imag    => freq_q,
-  --            fftpts_in    => open,
-  --            source_valid => open,     --tx_controller_valid,
-  --            source_ready => open,     --tx_controller_ready,
-  --            source_error => open,     --tx_controller_error,
-  --            source_sop   => tx_controller_in_sop,
-  --            source_eop   => tx_controller_in_eop,
-  --            source_real  => time_i,
-  --            source_imag  => time_q,
-  --            fftpts_out   => open);
+  i_inverse_fft_0 : inverse_fft
+    port map (clk          => clk,
+              reset_n      => reset,
+              sink_valid   => valid_freq,
+              sink_ready   => ready_freq,
+              sink_error   => error_freq,
+              sink_sop     => sop_freq,
+              sink_eop     => eop_freq,
+              sink_real    => i_reverted,
+              sink_imag    => q_reverted,
+              fftpts_in    => fftpts_in,
+              source_valid => valid_time,
+              source_ready => ready_time,
+              source_error => error_time,
+              source_sop   => sop_time,
+              source_eop   => eop_time,
+              source_real  => i_time,
+              source_imag  => q_time,
+              fftpts_out   => fftpts_out);
 
   --i_cyclic_prefix_0 : cyclic_prefix
   --  generic map (input_size      => FFT_SIZE,
