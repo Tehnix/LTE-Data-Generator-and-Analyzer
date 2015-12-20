@@ -9,7 +9,6 @@ vcom -check_synthesis src/types.vhd \
 	src/subcarrier_controller.vhd \
 	src/iq_mapper.vhd \
 	src/digit_reverter.vhd \
-	src/inverse_fft/synthesis/inverse_fft.vhd \
 	src/lte_signal_generator.vhd \
 	tests/lte_signal_generator_test.vhd
 

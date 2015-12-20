@@ -1,7 +1,4 @@
 *.o
-*.qpf
-*.qsf
-*.qws
 *.qsys
 *.dpi
 *.cdb
