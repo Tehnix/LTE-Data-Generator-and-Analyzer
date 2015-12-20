@@ -23,7 +23,6 @@ _info
 *.qtl
 _vmake
 *.bak*
-*.do
 *.vht
 msim_transcript
 modelsim.ini

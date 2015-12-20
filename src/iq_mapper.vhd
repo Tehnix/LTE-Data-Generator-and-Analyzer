@@ -27,13 +27,16 @@ begin
     j := 0;
     k := 0;
 
-    while (j <= modulation_width_g / 2) loop
+    while (k < modulation_width_g / 2) loop
       even_v(k) := bit_sequence(j);
       odd_v(k)  := bit_sequence(j + 1);
 
       j := j + 2;
       k := k + 1;
     end loop;
+
+    even <= even_v;
+    odd <= odd_v;
   end process;
 
   i <= IQ_map(to_integer(unsigned(even))) when enable = '1'

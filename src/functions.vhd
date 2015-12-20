@@ -1,12 +1,12 @@
 package functions is
-  function log2( i : natural) return integer;
+  function log2( i : natural ) return integer;
 end package;
 
 package body functions is
 
   -- Function by TrickyDicky referenced from:
   --   http://www.edaboard.com/thread186363.html
-  function log2( i : natural) return integer is
+  function log2( i : natural ) return integer is
     variable temp    : integer := i;
     variable ret_val : integer := 0;
   begin
