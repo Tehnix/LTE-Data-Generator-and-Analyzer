@@ -59,10 +59,8 @@ begin
           start_of_packet <= '1';
         end if;
 
-        if subcarrier_counter = GUARD_BOUNDARY then
+        if subcarrier_counter = GUARD_BOUNDARY - 1 then
           next_subcarrier_counter <= (others => '0');
-
-          iq_mapper_enable <= '1';
 
           next_state <= data;
         end if;
@@ -71,7 +69,7 @@ begin
       when data =>
         iq_mapper_enable <= '1';
 
-        if subcarrier_counter = DATA_BOUNDARY then
+        if subcarrier_counter = DATA_BOUNDARY - 1 then
           next_subcarrier_counter <= (others => '0');
 
           next_state <= rhs_guard;
@@ -79,8 +77,7 @@ begin
 
       -- Zero padding
       when rhs_guard =>
-
-        if subcarrier_counter = GUARD_BOUNDARY then
+        if subcarrier_counter = GUARD_BOUNDARY - 1 then
           end_of_packet <= '1';
 
           next_subcarrier_counter <= (others => '0');

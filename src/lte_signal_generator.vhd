@@ -166,7 +166,7 @@ begin
 
   ready_time <= '1';
 
-  fftpts_in <= (others => '0');
+  fftpts_in <= "10000000"; -- 128
 
   i_gsg_0 : gold_sequence_generator
     generic map (polynomial_degree_g => POLYNOMIAL_DEGREE,
