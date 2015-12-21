@@ -8,9 +8,12 @@ vcom -check_synthesis src/types.vhd \
 	src/gold_sequence_generator.vhd \
 	src/subcarrier_controller.vhd \
 	src/iq_mapper.vhd \
+	src/inverse_fft/simulation/inverse_fft.vhd \
 	src/digit_reverter.vhd \
 	src/lte_signal_generator.vhd \
 	tests/lte_signal_generator_test.vhd
+
+# vcom src/inverse_fft/simulation/submodules/inverse_fft_fft_ii_0.vho
 
 vsim lte_signal_generator_test
 
@@ -49,13 +52,14 @@ add wave -label "Q" -radix float32 -noupdate /lte_signal_generator_test/i_lte_si
 
 add wave -noupdate -divider -height 28 "iFFT"
 
-add wave -label "Valid In" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_valid
+add wave -label "Valid In" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/sink_valid
+add wave -label "Ready In" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/sink_ready
 add wave -label "I Out" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_real
 add wave -label "Q Out" -radix float32 -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_imag
 add wave -label "Valid Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_valid
 add wave -label "SOP Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_sop
 add wave -label "EOP Out" -noupdate /lte_signal_generator_test/i_lte_signal_generator_0/i_inverse_fft_0/source_eop
 
-WaveRestoreZoom {0 ps} {100000 ns}
+WaveRestoreZoom {0 ps} {200000 ns}
 
-run 100000 ns
+run 200000 ns

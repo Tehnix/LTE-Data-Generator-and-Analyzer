@@ -1,7 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
+
 use work.constants.all;
 use work.types.all;
+
 
 entity lte_signal_generator is
   port (clk_gsg    : in  std_logic;
@@ -139,6 +141,9 @@ architecture structural of lte_signal_generator is
   signal fifo_full : std_logic;
 
   -- iFFT signals
+  -- iFFT's reset is activel-low
+  signal reset_n : std_logic;
+
   signal valid_freq, ready_freq, sop_freq, eop_freq,
     valid_time, ready_time, sop_time, eop_time : std_logic;
 
@@ -147,6 +152,8 @@ architecture structural of lte_signal_generator is
 
 
 begin
+
+  reset_n <= not(reset);
 
   v_i <= v_t(31 downto 0);
   v_q <= v_t(63 downto 32);
@@ -192,7 +199,7 @@ begin
 
   i_inverse_fft_0 : inverse_fft
     port map (clk          => clk,
-              reset_n      => reset,
+              reset_n      => reset_n,
               sink_valid   => valid_freq,
               sink_ready   => ready_freq,
               sink_error   => error_freq,
